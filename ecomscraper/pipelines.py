@@ -7,6 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import mysql.connector
+from scrapy.exceptions import NotConfigured
 
 class EcomscraperPipeline:
     def process_item(self, item, spider):
@@ -20,7 +21,7 @@ class SaveToMySQLPipeline:
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mysql_config=crawler.settings.getdict('MYSQL_CONFIG')
+            mysql_config=crawler.settings.getdict('ITEMS_CONFIG')
         )
 
     def open_spider(self, spider):
@@ -101,3 +102,38 @@ class SaveToMySQLPipeline:
         self.conn.commit()
 
         return item
+
+
+class MySQLStartUrlsPipeline:
+    def __init__(self, mysql_config):
+        self.mysql_config = mysql_config
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        mysql_config = crawler.settings.getdict('LINKS_CONFIG')
+        if not mysql_config:
+            raise NotConfigured("LINKS_CONFIG not set")
+        return cls(mysql_config)
+
+    def open_spider(self, spider):
+        self.conn = mysql.connector.connect(**self.mysql_config)
+        self.cursor = self.conn.cursor()
+
+    def close_spider(self, spider):
+        self.conn.close()
+
+    def process_spider_input(self, response, spider):
+        pass
+
+    def process_item(self, item, spider):
+        return item
+
+    def process_spider_exception(self, response, exception, spider):
+        pass
+
+    def spider_opened(self, spider):
+        query = "SELECT url FROM links"
+        self.cursor.execute(query)
+        self.conn.commit()
+        result = self.cursor.fetchall()
+        spider.start_urls = [row[0] for row in result]

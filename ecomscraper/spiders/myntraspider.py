@@ -1,6 +1,6 @@
 import scrapy, re, random, time
 from scrapy.loader import ItemLoader
-from ecomscraper.items import MyntraItem
+from ecomscraper.items import MyntraOrAjioItem
 import http.cookies, json
 
 
@@ -12,7 +12,7 @@ class MyntraSpider(scrapy.Spider) :
 
     def start_requests(self):
         
-        first_url = "https://www.myntra.com/casual-shoes/herenow/herenow-men-white--blue-comfort-insole-basics-sneakers/22605718/buy"
+        first_url = self.start_urls[0]
         
         yield scrapy.Request(first_url, headers = { "User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0" }, callback=self.get_data)
 
@@ -39,22 +39,32 @@ class MyntraSpider(scrapy.Spider) :
     def parse(self, response) :
         
         data = json.loads(response.text)["style"]
+        loader = ItemLoader(item=MyntraOrAjioItem(), selector=data)
 
         prices = []
         for size in data["sizes"] :
             if size['sizeSellerData'] != [] and "discountedPrice" in size['sizeSellerData'][0].keys() :
                 prices.append(size['sizeSellerData'][0]["discountedPrice"])
 
-        availability = False if prices == [] else True
+        availability = bool(prices)
 
-        yield {
-            "availability" : availability,
-            "itemName" : data["name"],
-            "price" : min(prices),
-            "rating" : data["ratings"]["averageRating"],
-            "noOfRatings" : data["ratings"]["totalCount"],
-            "itemLink" : response.url
-        }
+        # yield {
+        #     "availability" : availability,
+        #     "itemName" : data["name"],
+        #     "price" : min(prices),
+        #     "rating" : data["ratings"]["averageRating"],
+        #     "noOfRatings" : data["ratings"]["totalCount"],
+        #     "itemLink" : response.url
+        # }
+
+        loader.add_value("availability", availability)
+        loader.add_value("itemName", data["name"])
+        loader.add_value("price", min(prices))
+        loader.add_value("rating", data["ratings"]["averageRating"])
+        loader.add_value("noOfRatings", data["ratings"]["totalCount"])
+        loader.add_value("itemLink", response.url)
+
+        yield loader.load_item()
 
     def random_delay(self) :
         delay = random.uniform(1, 5)

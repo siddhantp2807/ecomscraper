@@ -16,9 +16,6 @@ def lastVal(value) :
 def availabilityConverter(value) :
     return value == "In stock"
 
-def styledData(data) :
-    return data["style"]
-
 class AmazonItem(scrapy.Item) :
     # define the fields for your item here:
     availability = scrapy.Field(input_processor = MapCompose(remove_tags, str.strip, availabilityConverter), output_processor = TakeFirst())
@@ -28,10 +25,11 @@ class AmazonItem(scrapy.Item) :
     noOfRatings = scrapy.Field(input_processor = MapCompose(remove_tags, str.strip, findAllNumbers, Join(""), int), output_processor = TakeFirst())
     itemLink = scrapy.Field(output_processor=TakeFirst())
 
-class MyntraItem(scrapy.Item) :
+class MyntraOrAjioItem(scrapy.Item) :
     # define the fields for your item here:
-    itemName = scrapy.Field()
-    price = scrapy.Field()
-    rating = scrapy.Field()
-    noOfRatings = scrapy.Field()
+    availability = scrapy.Field(output_processor=TakeFirst())
+    itemName = scrapy.Field(output_processor=TakeFirst())
+    price = scrapy.Field(output_processor=TakeFirst())
+    rating = scrapy.Field(output_processor=TakeFirst())
+    noOfRatings = scrapy.Field(output_processor=TakeFirst())
     itemLink = scrapy.Field(output_processor=TakeFirst())

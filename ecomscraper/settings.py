@@ -57,9 +57,11 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    "scrapy.extensions.telnet.TelnetConsole": None,
-#}
+# EXTENSIONS = {
+#    "ecomscraper.commands.InitDBCommand" : 1,
+# }
+
+COMMANDS_MODULE = "ecomscraper.commands"
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
@@ -68,12 +70,20 @@ ITEM_PIPELINES = {
    'ecomscraper.pipelines.SaveToMySQLPipeline': 400,
 }
 
-MYSQL_CONFIG = {
+ITEMS_CONFIG = {
     'host': config('MYSQL_HOST'),
     'user': config('MYSQL_USER'),
     'password': config('MYSQL_PASSWORD'),
-    'database': config('MYSQL_DATABASE'),
+    'database': config('ITEMS_DATABASE'),
 }
+
+LINKS_CONFIG = {
+    'host': config('MYSQL_HOST'),
+    'user': config('MYSQL_USER'),
+    'password': config('MYSQL_PASSWORD'),
+    'database': config('LINKS_DATABASE'),
+}
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
