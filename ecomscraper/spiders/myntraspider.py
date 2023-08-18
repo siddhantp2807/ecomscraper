@@ -8,7 +8,7 @@ class MyntraSpider(scrapy.Spider) :
 
     name = "myntra"
 
-    start_urls = ["https://www.myntra.com/casual-shoes/herenow/herenow-men-white--blue-comfort-insole-basics-sneakers/22605718/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-white-sneakers/19706534/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-grey-textured-sneakers/19925384/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-grey-sneakers/20234358/buy"]
+    # start_urls = ["https://www.myntra.com/casual-shoes/herenow/herenow-men-white--blue-comfort-insole-basics-sneakers/22605718/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-white-sneakers/19706534/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-grey-textured-sneakers/19925384/buy", "https://www.myntra.com/casual-shoes/asian/asian-men-grey-sneakers/20234358/buy"]
 
     def start_requests(self):
         

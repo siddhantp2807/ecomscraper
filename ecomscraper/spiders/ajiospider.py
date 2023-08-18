@@ -6,7 +6,7 @@ class AJioSpider(scrapy.Spider) :
 
     name = "ajio"
 
-    start_urls = ["https://www.ajio.com/red-tape-round-toe-lace-up-sneakers/p/469419009_navy", "https://www.ajio.com/red-tape-low-top-lace-up-sneakers/p/466345463_white", "https://www.ajio.com/red-tape-mid-top-lace-up-sneakers/p/466330708_white"]
+    # start_urls = ["https://www.ajio.com/red-tape-round-toe-lace-up-sneakers/p/469419009_navy", "https://www.ajio.com/red-tape-low-top-lace-up-sneakers/p/466345463_white", "https://www.ajio.com/red-tape-mid-top-lace-up-sneakers/p/466330708_white"]
 
     def start_requests(self):
         for url in self.start_urls :

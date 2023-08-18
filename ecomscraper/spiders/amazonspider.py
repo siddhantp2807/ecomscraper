@@ -6,7 +6,7 @@ class AmazonSpider(scrapy.Spider) :
 
     name = 'amazon'
 
-    start_urls = ['https://www.amazon.in/dp/B0C9LNHR8Y/', 'https://www.amazon.in/dp/B0C1S6V34M/', 'https://www.amazon.in/dp/B0C6DYLM82/', 'https://www.amazon.in/dp/B0BVBC5RQG/']
+    # start_urls = ['https://www.amazon.in/dp/B0C9LNHR8Y/', 'https://www.amazon.in/dp/B0C1S6V34M/', 'https://www.amazon.in/dp/B0C6DYLM82/', 'https://www.amazon.in/dp/B0BVBC5RQG/']
 
     def start_requests(self) :
         for url in self.start_urls :

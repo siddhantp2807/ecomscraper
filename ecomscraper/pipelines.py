@@ -132,8 +132,8 @@ class MySQLStartUrlsPipeline:
         pass
 
     def spider_opened(self, spider):
-        query = "SELECT url FROM links"
-        self.cursor.execute(query)
+        query = "SELECT link FROM links WHERE (site=%s)"
+        self.cursor.execute(query, spider.name)
         self.conn.commit()
         result = self.cursor.fetchall()
         spider.start_urls = [row[0] for row in result]
